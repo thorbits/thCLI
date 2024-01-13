@@ -20,7 +20,7 @@ sound.autoDetect = "TRUE"
 
       Debian regular update
 #========================#
-printf '\nUpdating repos and software...\n\n'; echo -e "deb http://ftp.ca.debian.org/debian sid main contrib\ndeb-src http://ftp.ca.debian.org/debian trixie main contrib\n\ndeb http://security.debian.org/debian-security trixie-security main contrib\ndeb-src http://security.debian.org/debian-security trixie-security main contrib" > /etc/apt/sources.list; apt update; apt -y install zstd nala && { echo '1,2,3' && printf y\n; } | nala fetch --debian sid && nala update; { printf y\n; } | nala install bc curl eza htop git lm-sensors neofetch sudo tldr vim wget; { printf y\n; } | nala full-upgrade && update-grub2; sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; echo -e '\nPress enter to reboot'; read; reboot
+printf '\nUpdating repos and software...\n\n'; echo -e "deb http://ftp.ca.debian.org/debian sid main contrib\ndeb-src http://ftp.ca.debian.org/debian trixie main contrib\n\ndeb http://security.debian.org/debian-security trixie-security main contrib\ndeb-src http://security.debian.org/debian-security trixie-security main contrib" > /etc/apt/sources.list; apt update; apt -y install zstd nala && { echo '1,2,3' && printf y\n; } | nala fetch --debian sid && nala update; nala full-upgrade -y; nala install -y bc curl eza htop git lm-sensors neofetch pv rsync sudo tldr vim wget && update-grub2; sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; echo -e '\nPress enter to reboot'; read; reboot
 
       eZkernel Debian pre-compile update
 #========================#
