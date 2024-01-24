@@ -1,0 +1,34 @@
+
+#========================#
+#      Fedora Linux      #
+#========================#
+
+--> a nice file listing: ls -phalANXgs --color=auto --time-style=iso --no-group --group-directories-first
+--> list current kernel: uname -mrs
+--> list all installed kernels: rpm -qa kernel
+--> omit kernel updates: dnf -x kernel* -y upgrade
+--> uninstall kernel: dnf remove $(rpm -qa 'kernel*' | grep '.rcX.' )
+
+       eZkernel Fedora Copr (https://download.copr.fedorainfracloud.org/results/%40kernel-vanilla/fedora/fedora-rawhide-x86_64/) **/***
+#========================#
+printf '\nWelcome '; whoami; echo -e 'to eZkernel Fedora\n\nInstalling compiler software...\n'; dnf -y install bc bison dwarves elfutils-libelf-devel fedpkg flex gcc make ncurses-devel neofetch openssl openssl-devel perl rsync wget; dnf clean all; printf '\nCompiler software updated.\n\nDownloading sources...\n\n'; wget https://download.copr.fedorainfracloud.org/results/%40kernel-vanilla/fedora/fedora-rawhide-x86_64/06507306-mainline-fedora-rawhide/kernel-6.6.0-0.rc5.439.vanilla.fc40.x86_64.rpm; rpm -ivh *.rpm; printf 'y\n'| rm *.rpm; printf '\n\nExtracting sources...\n'; cd rpmbuild; tar -xf SOURCES/*.xz -C ~/rpmbuild --strip-components=1; yes '' | make localmodconfig; make menuconfig && printf 'Compiling kernel...\n\n'; time { make -j32 rpm-pkg; rpm -ivh ~/rpmbuild/RPMS/x86_64/kernel-6*.rpm; grub2-mkconfig -o /boot/grub2/grub.cfg; sed -i 's/set timeout=5/set timeout=1/' /boot/grub2/grub.cfg; printf '\nCompilation time:\n'; }; printf '\neZkernel Fedora compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf rpmbuild; reboot
+
+--> OR kernel.spec installs itself dependencies:
+printf '\nWelcome '; whoami; echo -e 'to eZkernel Fedora\n'; dnf -y install wget; printf '\nDownloading sources...\n\n'; wget https://download.copr.fedorainfracloud.org/results/%40kernel-vanilla/fedora/fedora-rawhide-x86_64/06507306-mainline-fedora-rawhide/kernel-6.6.0-0.rc5.439.vanilla.fc40.src.rpm; rpm -ivh *.rpm; printf 'y\n'| rm *.rpm; printf '\n\nExtracting sources...\n'; cd rpmbuild; tar -xf SOURCES/*.xz -C ~/rpmbuild --strip-components=1; dnf -y install ncurses-devel neofetch perl rsync; dnf -y builddep SPECS/kernel.spec; dnf clean all; printf '\nCompiler software updated.\n\n'; yes '' | make localmodconfig; make menuconfig && printf 'Compiling kernel...\n\n'; time { make -j32 rpm-pkg; rpm -ivh ~/rpmbuild/RPMS/x86_64/kernel-6*.rpm; grub2-mkconfig -o /boot/grub2/grub.cfg; sed -i 's/set timeout=5/set timeout=1/' /boot/grub2/grub.cfg; printf '\nCompilation time:\n'; }; printf '\neZkernel Fedora compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf rpmbuild; reboot
+
+       eZkernel Fedora Xanmod (config: https://github.com/xanmod/linux/tree/6.5/CONFIGS/xanmod/gcc)
+#========================#
+printf '\nWelcome '; whoami; echo -e 'to eZkernel Fedora\n\nInstalling compiler software...\n'; dnf -y install bc bison dwarves elfutils-libelf-devel fedpkg flex gcc make ncurses-devel neofetch openssl openssl-devel perl rsync wget; dnf clean all; printf '\nCompiler software updated.\n\nDownloading sources...\n\n'; wget https://raw.githubusercontent.com/xanmod/linux/6.5/CONFIGS/xanmod/gcc/config_x86-64-v3 https://download.copr.fedorainfracloud.org/results/%40kernel-vanilla/fedora/fedora-rawhide-x86_64/06507306-mainline-fedora-rawhide/kernel-6.6.0-0.rc5.439.vanilla.fc40.src.rpm; rpm -ivh *.rpm; printf 'y\n'| rm *.rpm; printf '\n\nExtracting sources...\n'; cd rpmbuild; tar -xf SOURCES/*.xz -C ~/rpmbuild --strip-components=1; mv ~/*3 .config; make menuconfig && printf 'Compiling kernel...\n\n'; time { make -j32 rpm-pkg; rpm -ivh ~/rpmbuild/RPMS/x86_64/kernel-6*.rpm; grub2-mkconfig -o /boot/grub2/grub.cfg; sed -i 's/set timeout=5/set timeout=1/' /boot/grub2/grub.cfg; printf '\nCompilation time:\n'; }; printf '\neZkernel Fedora compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf rpmbuild; reboot
+
+** other compile method:
+printf '\nCompiling kernel...\n\n'; cd ~/rpmbuild/SPECS; sed -i 's/# define buildid .local/define buildid .-amd64/' kernel.spec; time { rpmbuild -bb --with baseonly --without debug --without debuginfo --target=`uname -m` kernel.spec && { dnf -y install --nogpgcheck RPMS/X86_64/kernel-6*.rpm; grub2-mkconfig -o /boot/grub2/grub.cfg; sed -i 's/set timeout=5/set timeout=1/' /boot/grub2/grub.cfg; printf '\nCompilation time:\n' } }; printf '\neZkernel Fedora compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf rpmbuild; reboot
+
+printf '\nCompiling kernel...\n\n'; cd ~/rpmbuild/SPECS; sed -i 's/# define buildid .local/define buildid .-amd64/' kernel.spec; time { rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 kernel.spec 2>&1 | tee ~/rpmbuild/RPMS/x86_64 && { dnf -y install --nogpgcheck RPMS/X86_64/kernel-6*.rpm; grub2-mkconfig -o /boot/grub2/grub.cfg; sed -i 's/set timeout=5/set timeout=1/' /boot/grub2/grub.cfg; printf '\nCompilation time:\n' } }; printf '\neZkernel Fedora compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf rpmbuild; reboot
+
+*** enable this repo: dnf -y copr enable @kernel-vanilla/mainline && dnf -y upgrade 'kernel*' && reboot	(uninstall: dnf copr remove REPONAME)
+*** advice dnf to query frequently updated repo every hour and less often updated repo every 4 hours: sudo sed -i 's!baseurl=https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/\(mainline\|stable-rc\|next\).*!&\nmetadata_expire=1h!g; s!baseurl=https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/\(stable\|fedora\)/.*!&\nmetadata_expire=4h!g;' /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:group_kernel-vanilla:*.repo
+
+       eZkde Fedora
+#========================#
+dnf group info kde-desktop-environment	 (to see list of groups in this environment)
+sudo dnf install @kde-desktop-environment; sudo systemctl set-default graphical.target; sudo systemctl enable sddm
