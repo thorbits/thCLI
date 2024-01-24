@@ -1,0 +1,80 @@
+
+#========================#
+#       Arch Linux       #
+#========================#
+
+--> a nice file listing: ls -phalANXgs --color=auto --time-style=iso --no-group --group-directories-first
+--> if unable to update/lock database: rm /var/lib/pacman/db.lck
+--> local cache: mount --mkdir /dev/sr0 /mnt/repo && echo -e '[custom]\nSigLevel = PackageRequired\nServer = file:///mnt/repo/Packages' >> /etc/pacman.conf && repo-add /mnt/repo/repo.db.tar.gz
+--> sed -i '/^#Color/Color\nILoveCandy' /etc/pacman.conf; sed -i '/^#ParallelDownloads = 5/ParallelDownloads = 5' /etc/pacman.conf 
+--> || ( printf '\neZkernel Arch compilation failed.\n\nPress enter to exit'; read ) 
+--> cp -v System.map /boot/System.map-linux-6.x.0; ln -sf /boot/System.map-linux-6.x.0 /boot/System.map; 
+--> visudo nobody ALL=(ALL) NOPASSWD:ALL (THEN) mkdir -p /home/build; chgrp nobody /home/build; chmod g+ws /home/build; setfacl -m u::rwx,g::rwx /home/build; setfacl -d --set u::rwx,g::rwx,o::- /home/build
+--> add after 'Extracting sources...' if logged as user: 'USER' --> chown -R $USER:$USER SOURCESARCHIVENAME
+--> wget https://aur.archlinux.org/cgit/aur.git/snapshot/modprobed-db.tar.gz; tar -zxf *.gz --strip-components=1; printf 'y\n' | makepkg -si; rm -Rf * .*; modprobed-db; modprobed-db store; 
+--> pacman -Syy --needed --noconfirm git && git clone https://github.com/ChrisTitusTech/ArchTitus && cd ArchTitus && ./archtitus.sh
+
+       eZarch install (also: https://github.com/altercation/archblocks)
+#========================#
+--> create 1 partition UEFI/GPT
+printf '\nWelcome '; whoami; echo -e 'to eZarch install\n\nCreating partitions...\n' && sgdisk -n 0:2048:+350M -t 1:ef00 /dev/sda && sgdisk -n 0:0:0 -t 2:8e00 /dev/sda && printf '\n' && mkfs.fat /dev/sda1 && mkfs.ext4 /dev/sda2 && mount -v /dev/sda2 /mnt && mount --mkdir -v /dev/sda1 /mnt/boot/efi && printf '\n' && sgdisk -p /dev/sda && printf '\n' && pacstrap -K /mnt base base-devel linux linux-firmware amd-ucode efibootmgr grub networkmanager sudo vi zstd && genfstab -U /mnt >> /mnt/etc/fstab && arch-chroot /mnt
+--> THEN
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen; locale-gen; echo -e "LANG=en_US.UTF-8" >> /etc/locale.conf; echo -e "arch" >> /etc/hostname; echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.domain arch" >> /etc/hosts; printf '\nInstalling bootloader...\n'; grub-install --target=x86_64-efi --bootloader-id=GRUB; grub-mkconfig -o /boot/grub/grub.cfg; sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; printf '\nEnabling services...\n'; systemctl enable NetworkManager; systemctl enable systemd-networkd; systemctl enable systemd-resolved; printf '\nChoose Root password.\n'; passwd && useradd --groups wheel --create-home user; usermod --append --groups wheel user && echo -e 'wheel ALL=(ALL) ALL\nuser ALL=(ALL:ALL) ALL' > /etc/sudoers.d/01 && echo -e '\nChoose User password:'; passwd user && printf '\neZarch install complete.\n'; exit
+
+--> OR create 1 partition BIOS/MSDOS
+printf '\nWelcome '; whoami; echo -e 'to eZarch install\n\nCreating partitions...\n' && parted -s /dev/sda mklabel msdos && parted -s /dev/sda mkpart primary ext4 1MiB 102000MiB && parted -s /dev/sda set 1 boot on && mkfs.ext4 /dev/sda1 && mount -vt ext4 /dev/sda1 /mnt && mkdir /mnt/boot && parted -ls && printf '\n' && pacstrap -K /mnt base-devel linux linux-firmware amd-ucode efibootmgr grub networkmanager sudo vi zstd && genfstab -U /mnt >> /mnt/etc/fstab && arch-chroot /mnt
+--> THEN
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen; locale-gen; echo -e "LANG=en_US.UTF-8" >> /etc/locale.conf; echo -e "arch" >> /etc/hostname; echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.domain arch" >> /etc/hosts; printf '\nInstalling bootloader...\n'; grub-install /dev/sda; grub-mkconfig -o /boot/grub/grub.cfg; sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; printf '\nEnabling services...\n'; systemctl enable NetworkManager; systemctl enable systemd-networkd; systemctl enable systemd-resolved; printf '\nChoose Root password.\n'; passwd && useradd --groups wheel --create-home user; usermod --append --groups wheel user && echo -e 'wheel ALL=(ALL) ALL\nuser ALL=(ALL:ALL) ALL' > /etc/sudoers.d/01 && echo -e '\nChoose User password:'; passwd user && printf '\neZarch install complete.\n'; exit
+
+REMINDER: To compile a kernel log in as user, as makepkg is not allowed when root.
+#========================#
+
+       eZkernel Arch (https://aur.archlinux.org/packages/linux-clear)
+#========================#
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-clear.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs; sudo pacman --noconfirm -Sc; sudo reboot
+
+       eZkernel Arch (https://aur.archlinux.org/packages/linux-amd-znver2)
+#========================#
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-amd-znver2.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
+
+       eZkernel Arch (https://aur.archlinux.org/packages/linux-cachyos-rc)
+#========================#
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-cachyos-rc.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
+
+       eZkernel Arch (https://aur.archlinux.org/packages/linux-xanmod-linux-bin-x64v3 | https://aur.archlinux.org/packages/linux-xanmod-edge-linux-bin-x64v3)
+#========================#
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-xanmod-linux-bin-x64v3.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
+
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-xanmod-edge-linux-bin-x64v3.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
+
+       eZkernel Arch (https://aur.archlinux.org/packages/linux-lqx)
+#========================#
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-lqx.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
+
+       eZkde Arch
+#========================#
+{ echo '10'; echo '2 8 10 16 17 22 30 31 34 35 36 38 45 46'; echo '5 14 15 23 38 68 111'; echo '2'; echo '1'; echo '1'; echo '1'; printf 'y'; } | pacman -Syy --needed xorg sddm plasma kde-applications network-manager-applet && systemctl enable sddm && echo -e '\neZkde Arch install complete.\n\nPress enter to exit.'; read
+
+       Arch Vivaldi snapshot (https://vivaldi.com/blog/)
+#========================#
+sudo mkdir -p /tmp/vivaldi && cd $_ && sudo curl -L "https://downloads.vivaldi.com/snapshot/vivaldi-snapshot-6.6.3238.3-1.x86_64.rpm" -o vivaldi-*.rpm && sudo nano PKGBUILD
+-->PKGBUILD start
+pkgname=vivaldi-snapshot
+pkgver=6.6.3238.3-1
+pkgrel=1
+pkgdesc="An advanced browser made with the power user in mind."
+arch=('x86_64')
+
+depends=('alsa-lib' 'desktop-file-utils' 'gtk3' 'hicolor-icon-theme' 'libcups' 'libxss' 'nss' 'shared-mime-info')
+optdepends=('vivaldi-snapshot-ffmpeg-codecs: playback of proprietary video-audio')
+
+source=('vivaldi-snapshot-6.6.3238.3-1.x86_64.rpm')
+
+sha256sums=('SKIP')
+
+package() {
+ find $srcdir/ -mindepth 1 -maxdepth 1 -type d | xargs cp -r -t "$pkgdir"
+}
+-->PKGBUILD end
+sudo chown -R $USER:$USER /tmp/vivaldi
+makepkg -si
