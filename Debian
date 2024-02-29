@@ -48,7 +48,7 @@ printf '\nWelcome '; whoami; printf 'to eZkde Debian\n\n'; apt -y upgrade xserve
 #========================#
 apt -y upgrade alacritty sway swaybg swayidle swayimg swaylock waybar wofi fonts-font-awesome; mkdir -p ~/.config/sway ~/.config/waybar ~/.config/wofi; git clone https://github.com/thorbits/mysway.git; chmod +x ~/.config/sway/*.sh
 
-Debian Vivaldi snapshot (https://vivaldi.com/blog/)
+      Debian Vivaldi snapshot (https://vivaldi.com/blog/)
 #========================#
 sudo mkdir -p /tmp/vivaldi && cd $_ && sudo wget https://downloads.vivaldi.com/snapshot/vivaldi-snapshot_6.6.3238.3-1_amd64.deb && sudo dpkg -i vivaldi-*.deb | sudo apt -y --fix-broken install
 
