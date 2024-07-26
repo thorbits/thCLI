@@ -1,6 +1,5 @@
-
 #========================#
-#       Arch Linux       #
+#	Arch Linux       #
 #========================#
 
 --> a nice file listing: ls -phalANXgs --color=auto --time-style=iso --no-group --group-directories-first
@@ -26,41 +25,50 @@ printf '\nWelcome '; whoami; echo -e 'to eZarch install\n\nCreating partitions..
 --> THEN
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen; locale-gen; echo -e "LANG=en_US.UTF-8" >> /etc/locale.conf; echo -e "arch" >> /etc/hostname; echo -e "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 arch.domain arch" >> /etc/hosts; printf '\nInstalling bootloader...\n'; grub-install /dev/sda; grub-mkconfig -o /boot/grub/grub.cfg; sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; printf '\nEnabling services...\n'; systemctl enable NetworkManager; systemctl enable systemd-networkd; systemctl enable systemd-resolved; printf '\nChoose Root password.\n'; passwd && useradd --groups wheel --create-home user; usermod --append --groups wheel user && echo -e 'wheel ALL=(ALL) ALL\nuser ALL=(ALL:ALL) ALL' > /etc/sudoers.d/01 && echo -e '\nChoose User password:'; passwd user && printf '\neZarch install complete.\n'; exit
 
-REMINDER: To compile a kernel log in as user, as makepkg is not allowed when root.
+REMINDER: To compile a kernel log in as user, makepkg is not allowed as root.
 #========================#
 
        eZkernel Arch (https://aur.archlinux.org/packages/linux-clear)
 #========================#
-printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-clear.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs; sudo pacman --noconfirm -Sc; sudo reboot
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano fastfetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-clear.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo grub-mkconfig -o /boot/grub/grub.cfg; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs; sudo pacman --noconfirm -Sc; sudo reboot
 
        eZkernel Arch (https://aur.archlinux.org/packages/linux-amd-znver2)
 #========================#
-printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-amd-znver2.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano fastfetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-amd-znver2.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo grub-mkconfig -o /boot/grub/grub.cfg; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
 
        eZkernel Arch (https://aur.archlinux.org/packages/linux-cachyos-rc)
 #========================#
-printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-cachyos-rc.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano fastfetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-cachyos-rc.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo grub-mkconfig -o /boot/grub/grub.cfg; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
 
        eZkernel Arch (https://aur.archlinux.org/packages/linux-xanmod-linux-bin-x64v3 | https://aur.archlinux.org/packages/linux-xanmod-edge-linux-bin-x64v3)
 #========================#
-printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-xanmod-linux-bin-x64v3.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano fastfetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-xanmod-linux-bin-x64v3.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo grub-mkconfig -o /boot/grub/grub.cfg; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
 
-printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-xanmod-edge-linux-bin-x64v3.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano fastfetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-xanmod-edge-linux-bin-x64v3.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo grub-mkconfig -o /boot/grub/grub.cfg; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
 
        eZkernel Arch (https://aur.archlinux.org/packages/linux-lqx)
 #========================#
-printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano neofetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-lqx.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; sudo grub-mkconfig -o /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
+printf '\nWelcome '; whoami; printf 'to eZkernel Arch\n\n'; sudo pacman -Syy --needed --noconfirm nano fastfetch wget; mkdir src; cd $_; wget https://aur.archlinux.org/cgit/aur.git/snapshot/linux-lqx.tar.gz; tar -zxf *.gz --strip-components=1; nano PKGBUILD && time { printf 'y\n'| makepkg -s --skipchecksums --skippgpcheck; printf '\nCompilation time:\n'; } && sudo pacman -U --noconfirm *.zst; sudo grub-mkconfig -o /boot/grub/grub.cfg; sudo sed -i 's/set timeout=5/set timeout=1/' /boot/grub/grub.cfg; printf '\neZkernel Arch compilation successful.\n\nPress enter to reboot'; read; cd; rm -Rf src; printf 'y\n' | sudo pacman -Qdtq | sudo pacman -Rs -; sudo pacman --noconfirm -Sc; sudo reboot
 
        eZkde Arch
 #========================#
-{ echo '10'; echo '2 8 10 16 17 22 30 31 34 35 36 38 45 46'; echo '5 14 15 23 38 68 111'; echo '2'; echo '1'; echo '1'; echo '1'; printf 'y'; } | pacman -Syy --needed xorg sddm plasma kde-applications network-manager-applet && systemctl enable sddm && echo -e '\neZkde Arch install complete.\n\nPress enter to exit.'; read
+KDE 6
+sudo vim /etc/pacman.conf --> remove # before core-testing & extra-testing repos
+{ echo '1'; echo '2'; printf 'y'; } | sudo pacman -Syyu plasma-meta alacritty dolphin konsole && sudo systemctl enable sddm.service && sudo systemctl enable NetworkManager.service
+
+KDE 5
+{ echo '10'; echo '2 8 10 16 17 22 30 31 34 35 36 38 45 46'; echo '5 14 15 23 38 68 111'; echo '2'; echo '1'; echo '1'; echo '1'; printf 'y'; } | pacman -Syyu --needed xorg sddm plasma kde-applications network-manager-applet && systemctl enable sddm && echo -e '\neZkde Arch install complete.\n\nPress enter to exit.'; read
+
+       Arch Brave browser
+#========================#
+git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && yay -S brave-bin
 
        Arch Vivaldi snapshot (https://vivaldi.com/blog/)
 #========================#
-sudo mkdir -p /tmp/vivaldi && cd $_ && sudo curl -L "https://downloads.vivaldi.com/snapshot/vivaldi-snapshot-6.6.3238.3-1.x86_64.rpm" -o vivaldi-*.rpm && sudo nano PKGBUILD
+sudo mkdir -p /tmp/vivaldi && cd $_ && sudo curl -L "https://downloads.vivaldi.com/snapshot/vivaldi-snapshot-6.9.3405.3-1.x86_64.rpm" -o vivaldi-*.rpm && sudo nano PKGBUILD
 -->PKGBUILD start
 pkgname=vivaldi-snapshot
-pkgver=6.6.3238.3-1
+pkgver=6.9.3405.3-1
 pkgrel=1
 pkgdesc="An advanced browser made with the power user in mind."
 arch=('x86_64')
@@ -68,7 +76,7 @@ arch=('x86_64')
 depends=('alsa-lib' 'desktop-file-utils' 'gtk3' 'hicolor-icon-theme' 'libcups' 'libxss' 'nss' 'shared-mime-info')
 optdepends=('vivaldi-snapshot-ffmpeg-codecs: playback of proprietary video-audio')
 
-source=('vivaldi-snapshot-6.6.3238.3-1.x86_64.rpm')
+source=('vivaldi-snapshot-6.9.3405.3-1.x86_64.rpm')
 
 sha256sums=('SKIP')
 
