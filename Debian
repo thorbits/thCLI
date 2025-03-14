@@ -1,5 +1,5 @@
 #========================#
-#	Debian Linux          #
+# Debian Linux  #
 #========================#
 
 --> a nice file listing: ls -phalANXgs --color=auto --time-style=iso --no-group --group-directories-first
