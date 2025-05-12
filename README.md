@@ -5,7 +5,7 @@
 </div>
 <div align="center">
   
-## *Welcome to eZkernel, an interactive linux kernel compilation tool.*
+## *Welcome*
 
 </div>
 <div>
