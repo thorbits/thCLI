@@ -18,9 +18,6 @@
   <p><br></p>
 
 -
-  -  First clone this repo: *git clone* https://github.com/thorbits/thCLI.git
-  -  Go to cloned repo directory and type: *sh eZkernel_Debian*
-
 
 </div>
 
