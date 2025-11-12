@@ -4,8 +4,8 @@
 
 --> a nice file listing: ls -phalANXgs --color=auto --time-style=iso --no-group --group-directories-first
 --> if unable to update/lock database: rm /etc/apt/db.lck
---> printf 'y\n' | DEBIAN_FRONTEND=noninteractive apt-get remove --purge -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" linux-image-`uname -r`*
---> list all installed kernels: dpkg -l | grep linux-image | awk '{print$2}' && sudo apt remove --purge linux-image-NAME
+--> printf 'y\n' | DEBIAN_FRONTEND=noninteractive apt-get remove --purge -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" linux-image-`foo -r`*
+--> list all installed kernels: dpkg -l | grep linux-image | awk '{print$2}' && sudo apt remove --purge linux-image-foo
 --> Add SU user: vim /etc/sudoers , usermod -aG sudo user
 --> set console font: sudo dpkg-reconfigure console-setup
 --> /etc/default/grub: GRUB_INIT_TUNE="1750 523 1 392 1 523 1 659 1 784 1 1047 1 784 1 415 1 523 1 622 1 831 1 622 1 831 1 1046 1 1244 1 1661 1 1244 1 466 1 587 1 698 1 932 1 1195 1 1397 1 1865 1 1397 1"
